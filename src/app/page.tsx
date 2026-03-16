@@ -1,5 +1,6 @@
 import Header from '@/components/Header'
 import ReportCard from '@/components/ReportCard'
+import EmailCapture from '@/components/EmailCapture'
 import { getAllReports } from '@/lib/parseManHours'
 
 export const dynamic = 'force-dynamic'
@@ -50,6 +51,11 @@ export default function HomePage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Email capture */}
+        <div style={{ marginBottom: '48px' }}>
+          <EmailCapture context="homepage" />
         </div>
 
         {/* Report list */}

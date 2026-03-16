@@ -19,6 +19,17 @@ export default function Header() {
           <Link href="/about" style={{ color: '#8b949e', fontSize: '14px', textDecoration: 'none' }}>
             About
           </Link>
+          <Link href="/subscribe" style={{
+            backgroundColor: '#f85149',
+            color: '#ffffff',
+            fontSize: '13px',
+            fontWeight: '700',
+            textDecoration: 'none',
+            padding: '6px 14px',
+            borderRadius: '6px',
+          }}>
+            Subscribe
+          </Link>
         </nav>
       </div>
     </header>

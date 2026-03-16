@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import ItemCard from '@/components/ItemCard'
+import EmailCapture from '@/components/EmailCapture'
 import { getReport, getAllDates } from '@/lib/parseManHours'
 
 export const dynamic = 'force-dynamic'
@@ -123,6 +124,11 @@ export default async function ReportPage({
           </div>
         )}
       </main>
+
+      {/* Email capture */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px 48px' }}>
+        <EmailCapture context="report" />
+      </div>
 
       <footer style={{
         borderTop: '1px solid #21262d',
