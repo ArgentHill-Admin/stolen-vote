@@ -1,29 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
-  const cookieStore = await cookies()
+  const supabase = createServerClient()
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
+  // Invalidate the session on Supabase's side
   await supabase.auth.signOut()
 
+  // Clear sb-* auth cookies from the response
+  const cookieStore = await cookies()
   const origin = new URL(request.url).origin
-  return NextResponse.redirect(`${origin}/admin/login`, { status: 303 })
+  const response = NextResponse.redirect(`${origin}/admin/login`, { status: 303 })
+
+  cookieStore.getAll().forEach(cookie => {
+    if (cookie.name.startsWith('sb-')) {
+      response.cookies.delete(cookie.name)
+    }
+  })
+
+  return response
 }
