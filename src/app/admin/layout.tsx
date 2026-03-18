@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { AdminNav } from '@/components/admin/AdminNav'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Admin — Stolen.Vote',
   robots: { index: false, follow: false },
