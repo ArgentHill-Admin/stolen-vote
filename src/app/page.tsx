@@ -8,88 +8,161 @@ export const dynamic = 'force-dynamic'
 export default function HomePage() {
   const reports = getAllReports()
 
+  const totalItems = reports.reduce((sum, r) => sum + r.runSummary.itemsCollected, 0)
+  const totalGaps  = reports.reduce((sum, r) => sum + r.runSummary.coverageGapsCount, 0)
+
   return (
     <>
       <Header />
-      <main style={{ maxWidth: '960px', margin: '0 auto', padding: '48px 24px' }}>
 
-        {/* Hero */}
-        <div style={{ marginBottom: '48px', borderBottom: '1px solid #21262d', paddingBottom: '40px' }}>
-          <h1 style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '42px',
-            fontWeight: '800',
-            margin: '0 0 16px',
-            letterSpacing: '-1px',
-          }}>
-            <span style={{ color: '#f85149' }}>stolen</span>
-            <span style={{ color: '#e6edf3' }}>.vote</span>
-          </h1>
-          <p style={{ color: '#8b949e', fontSize: '17px', lineHeight: '1.6', maxWidth: '600px', margin: 0 }}>
-            Daily aggregation of voting rights, election integrity, and electoral legitimacy stories.
-            Every claim documented. Every source rated. Every coverage gap exposed.
-          </p>
+      <main style={{ maxWidth: '960px', margin: '0 auto', padding: '40px 24px' }}>
 
-          {/* Stats strip */}
-          {reports.length > 0 && (
-            <div style={{ display: 'flex', gap: '32px', marginTop: '28px' }}>
-              <div>
-                <div style={{ color: '#e6edf3', fontSize: '28px', fontWeight: '700' }}>{reports.length}</div>
-                <div style={{ color: '#484f58', fontSize: '13px' }}>Reports published</div>
-              </div>
-              <div>
-                <div style={{ color: '#e6edf3', fontSize: '28px', fontWeight: '700' }}>
-                  {reports.reduce((sum, r) => sum + r.runSummary.itemsCollected, 0)}
-                </div>
-                <div style={{ color: '#484f58', fontSize: '13px' }}>Items documented</div>
-              </div>
-              <div>
-                <div style={{ color: '#f0883e', fontSize: '28px', fontWeight: '700' }}>
-                  {reports.reduce((sum, r) => sum + r.runSummary.coverageGapsCount, 0)}
-                </div>
-                <div style={{ color: '#484f58', fontSize: '13px' }}>Coverage gaps flagged</div>
-              </div>
+        {/* Dateline */}
+        <div style={{
+          fontFamily: 'var(--font-lora), Georgia, serif',
+          fontStyle: 'italic',
+          fontSize: '12px',
+          color: '#646667',
+          letterSpacing: '0.04em',
+          marginBottom: '32px',
+          textTransform: 'uppercase',
+        }}>
+          Non-partisan voting integrity watchdog &mdash; Every claim documented. Every source rated. Every gap exposed.
+        </div>
+
+        {/* Two-column layout: main + sidebar */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '48px', alignItems: 'start' }}>
+
+          {/* Left: Reports */}
+          <div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: '16px',
+              marginBottom: '20px',
+              borderBottom: '2px solid #1C1C1C',
+              paddingBottom: '8px',
+            }}>
+              <h2 style={{
+                fontFamily: 'var(--font-playfair), Georgia, serif',
+                fontSize: '13px',
+                fontWeight: '700',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                margin: 0,
+                color: '#1C1C1C',
+              }}>
+                Latest Reports
+              </h2>
             </div>
-          )}
-        </div>
 
-        {/* Email capture */}
-        <div style={{ marginBottom: '48px' }}>
-          <EmailCapture context="homepage" />
-        </div>
+            {reports.length === 0 ? (
+              <div style={{
+                padding: '48px 0',
+                fontFamily: 'var(--font-lora), Georgia, serif',
+                fontStyle: 'italic',
+                color: '#646667',
+                fontSize: '16px',
+              }}>
+                No reports published yet.
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {reports.map(report => (
+                  <ReportCard key={report.date} report={report} />
+                ))}
+              </div>
+            )}
+          </div>
 
-        {/* Report list */}
-        {reports.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '80px 0', color: '#484f58' }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📋</div>
-            <p style={{ fontSize: '18px', margin: '0 0 8px', color: '#8b949e' }}>No reports published yet.</p>
-            <p style={{ fontSize: '14px', margin: 0 }}>
-              Add approved ManHours files to <code style={{ color: '#58a6ff' }}>content/approved/</code> to publish.
-            </p>
+          {/* Right: Sidebar */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+
+            {/* Stats */}
+            {reports.length > 0 && (
+              <div style={{
+                borderTop: '2px solid #1C1C1C',
+                paddingTop: '16px',
+              }}>
+                <h3 style={{
+                  fontFamily: 'var(--font-playfair), Georgia, serif',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  margin: '0 0 16px',
+                  color: '#1C1C1C',
+                }}>
+                  By The Numbers
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <StatBlock value={reports.length} label="Reports published" />
+                  <div style={{ borderTop: '1px solid #D5D5D7' }} />
+                  <StatBlock value={totalItems} label="Items documented" />
+                  <div style={{ borderTop: '1px solid #D5D5D7' }} />
+                  <StatBlock value={totalGaps} label="Coverage gaps flagged" accent />
+                </div>
+              </div>
+            )}
+
+            {/* Newsletter */}
+            <EmailCapture context="homepage" />
+
           </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <h2 style={{ color: '#8b949e', fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 8px' }}>
-              Published Reports
-            </h2>
-            {reports.map(report => (
-              <ReportCard key={report.date} report={report} />
-            ))}
-          </div>
-        )}
+        </div>
       </main>
 
       <footer style={{
-        borderTop: '1px solid #21262d',
-        padding: '32px 24px',
+        borderTop: '3px solid #1C1C1C',
         marginTop: '64px',
-        textAlign: 'center',
-        color: '#484f58',
-        fontSize: '13px',
+        padding: '28px 24px',
+        backgroundColor: '#F0EFEB',
       }}>
-        <p style={{ margin: '0 0 4px' }}>stolen.vote — Non-partisan voting integrity watchdog</p>
-        <p style={{ margin: 0 }}>All claims documented. All sources rated. All gaps exposed.</p>
+        <div style={{ maxWidth: '960px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <span style={{
+            fontFamily: 'var(--font-playfair), Georgia, serif',
+            fontSize: '16px',
+            fontWeight: '700',
+            color: '#1C1C1C',
+            letterSpacing: '-0.3px',
+          }}>
+            <span style={{ color: '#9F2236' }}>STOLEN</span>.VOTE
+          </span>
+          <span style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            fontStyle: 'italic',
+            fontSize: '12px',
+            color: '#646667',
+          }}>
+            Non-partisan. All claims documented. All sources rated. All gaps exposed.
+          </span>
+        </div>
       </footer>
     </>
+  )
+}
+
+function StatBlock({ value, label, accent = false }: { value: number; label: string; accent?: boolean }) {
+  return (
+    <div>
+      <div style={{
+        fontFamily: 'var(--font-playfair), Georgia, serif',
+        fontSize: '32px',
+        fontWeight: '800',
+        color: accent ? '#9F2236' : '#1C1C1C',
+        lineHeight: '1',
+      }}>
+        {value}
+      </div>
+      <div style={{
+        fontFamily: 'var(--font-lora), Georgia, serif',
+        fontSize: '12px',
+        color: '#646667',
+        marginTop: '3px',
+        letterSpacing: '0.02em',
+      }}>
+        {label}
+      </div>
+    </div>
   )
 }

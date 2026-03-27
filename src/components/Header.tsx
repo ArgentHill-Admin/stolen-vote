@@ -2,36 +2,94 @@ import Link from 'next/link'
 
 export default function Header() {
   return (
-    <header style={{ backgroundColor: '#0d1117', borderBottom: '1px solid #21262d' }}>
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '20px', fontWeight: '800', color: '#f85149', letterSpacing: '-0.5px', fontFamily: 'Georgia, serif' }}>
-            stolen
-          </span>
-          <span style={{ fontSize: '20px', fontWeight: '800', color: '#e6edf3', letterSpacing: '-0.5px', fontFamily: 'Georgia, serif' }}>
-            .vote
-          </span>
-        </Link>
-        <nav style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          <Link href="/" style={{ color: '#8b949e', fontSize: '14px', textDecoration: 'none' }}>
+    <header style={{ backgroundColor: '#F0EFEB' }}>
+
+      {/* Top crimson rule */}
+      <div style={{ height: '4px', backgroundColor: '#9F2236' }} />
+
+      {/* Masthead */}
+      <div style={{
+        maxWidth: '960px',
+        margin: '0 auto',
+        padding: '20px 24px 16px',
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        gap: '16px',
+        flexWrap: 'wrap',
+      }}>
+        {/* Logo + tagline */}
+        <div>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div style={{
+              fontFamily: 'var(--font-playfair), Georgia, serif',
+              fontSize: '36px',
+              fontWeight: '900',
+              letterSpacing: '-1px',
+              lineHeight: '1',
+              color: '#1C1C1C',
+            }}>
+              <span style={{ color: '#9F2236' }}>STOLEN</span>
+              <span style={{ color: '#1C1C1C' }}>.VOTE</span>
+            </div>
+          </Link>
+          <div style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            fontStyle: 'italic',
+            fontSize: '12px',
+            color: '#646667',
+            marginTop: '4px',
+            letterSpacing: '0.02em',
+          }}>
+            Voting integrity. Documented daily.
+          </div>
+        </div>
+
+        {/* Nav + subscribe */}
+        <nav style={{ display: 'flex', gap: '28px', alignItems: 'center', paddingBottom: '4px' }}>
+          <Link href="/" style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            color: '#1C1C1C',
+            fontSize: '14px',
+            textDecoration: 'none',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}>
             Reports
           </Link>
-          <Link href="/about" style={{ color: '#8b949e', fontSize: '14px', textDecoration: 'none' }}>
+          <Link href="/about" style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            color: '#1C1C1C',
+            fontSize: '14px',
+            textDecoration: 'none',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}>
             About
           </Link>
           <Link href="/subscribe" style={{
-            backgroundColor: '#f85149',
-            color: '#ffffff',
+            backgroundColor: '#9F2236',
+            color: '#F0EFEB',
+            fontFamily: 'var(--font-lora), Georgia, serif',
             fontSize: '13px',
             fontWeight: '700',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
             textDecoration: 'none',
-            padding: '6px 14px',
-            borderRadius: '6px',
+            padding: '7px 16px',
           }}>
-            Subscribe
+            Free Newsletter
           </Link>
         </nav>
       </div>
+
+      {/* Bottom rules — double broadsheet rule */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ borderTop: '3px solid #1C1C1C' }} />
+        <div style={{ borderTop: '1px solid #1C1C1C', marginTop: '3px' }} />
+      </div>
+      <div style={{ marginBottom: '0' }} />
+
     </header>
   )
 }

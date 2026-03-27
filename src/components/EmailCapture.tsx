@@ -7,33 +7,30 @@ interface EmailCaptureProps {
 }
 
 export default function EmailCapture({ context = 'homepage' }: EmailCaptureProps) {
-  const [email, setEmail] = useState('')
+  const [email, setEmail]   = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
   const heading = context === 'subscribe'
-    ? 'Subscribe to the stolen.vote newsletter'
-    : 'Get the full picture in your inbox'
+    ? 'Subscribe to the Stolen.Vote Newsletter'
+    : 'The Full Picture In Your Inbox'
 
   const subtext = context === 'subscribe'
     ? 'Premium analysis, expanded reporting, and curated context — delivered at a frequency that matches the news cycle.'
-    : 'Premium content — expanded reporting and editorial context not published on the site.'
+    : 'Expanded reporting and editorial context not published on the site.'
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email) return
-
     setStatus('loading')
     setErrorMsg('')
-
     try {
-      const res = await fetch('/api/subscribe', {
+      const res  = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
       const data = await res.json()
-
       if (res.ok && data.success) {
         setStatus('success')
         setEmail('')
@@ -50,18 +47,29 @@ export default function EmailCapture({ context = 'homepage' }: EmailCaptureProps
   if (status === 'success') {
     return (
       <div style={{
-        backgroundColor: '#161b22',
-        border: '1px solid #1a4731',
-        borderRadius: '8px',
-        padding: context === 'subscribe' ? '40px' : '24px',
+        border: '1px solid #D5D5D7',
+        borderTop: '3px solid #9F2236',
+        backgroundColor: '#FFFFFF',
+        padding: context === 'subscribe' ? '36px' : '20px',
         textAlign: 'center',
       }}>
-        <div style={{ fontSize: '28px', marginBottom: '12px' }}>✓</div>
-        <p style={{ color: '#3fb950', fontSize: '16px', fontWeight: '600', margin: '0 0 6px' }}>
+        <p style={{
+          fontFamily: 'var(--font-playfair), Georgia, serif',
+          color: '#2D5A1B',
+          fontSize: '16px',
+          fontWeight: '700',
+          margin: '0 0 6px',
+        }}>
           You&apos;re on the list.
         </p>
-        <p style={{ color: '#484f58', fontSize: '14px', margin: 0 }}>
-          Check your inbox to confirm your subscription.
+        <p style={{
+          fontFamily: 'var(--font-lora), Georgia, serif',
+          fontStyle: 'italic',
+          color: '#646667',
+          fontSize: '13px',
+          margin: 0,
+        }}>
+          Check your inbox to confirm.
         </p>
       </div>
     )
@@ -69,33 +77,33 @@ export default function EmailCapture({ context = 'homepage' }: EmailCaptureProps
 
   return (
     <div style={{
-      backgroundColor: '#161b22',
-      border: '1px solid #30363d',
-      borderRadius: '8px',
-      padding: context === 'subscribe' ? '40px' : '24px',
+      border: '1px solid #D5D5D7',
+      borderTop: '3px solid #9F2236',
+      backgroundColor: '#FFFFFF',
+      padding: context === 'subscribe' ? '36px' : '20px',
     }}>
       <h3 style={{
-        color: '#e6edf3',
-        fontSize: context === 'subscribe' ? '22px' : '16px',
+        fontFamily: 'var(--font-playfair), Georgia, serif',
+        color: '#1C1C1C',
+        fontSize: context === 'subscribe' ? '22px' : '17px',
         fontWeight: '700',
         margin: '0 0 8px',
-        fontFamily: 'Georgia, serif',
+        lineHeight: '1.3',
       }}>
         {heading}
       </h3>
       <p style={{
-        color: '#8b949e',
-        fontSize: '14px',
+        fontFamily: 'var(--font-lora), Georgia, serif',
+        fontStyle: 'italic',
+        color: '#646667',
+        fontSize: '13px',
         margin: '0 0 16px',
-        lineHeight: '1.5',
+        lineHeight: '1.55',
       }}>
         {subtext}
       </p>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}
-      >
+      <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
         <input
           type="email"
           value={email}
@@ -105,30 +113,33 @@ export default function EmailCapture({ context = 'homepage' }: EmailCaptureProps
           disabled={status === 'loading'}
           style={{
             flex: '1',
-            minWidth: '220px',
-            backgroundColor: '#0d1117',
-            border: '1px solid #30363d',
-            borderRadius: '6px',
-            padding: '10px 14px',
-            color: '#e6edf3',
+            minWidth: '200px',
+            backgroundColor: '#F0EFEB',
+            border: '1px solid #D5D5D7',
+            padding: '9px 12px',
+            color: '#1C1C1C',
             fontSize: '14px',
+            fontFamily: 'var(--font-lora), Georgia, serif',
             outline: 'none',
+            borderRadius: 0,
           }}
         />
         <button
           type="submit"
           disabled={status === 'loading'}
           style={{
-            backgroundColor: status === 'loading' ? '#21262d' : '#f85149',
-            color: status === 'loading' ? '#8b949e' : '#ffffff',
+            backgroundColor: status === 'loading' ? '#646667' : '#9F2236',
+            color: '#F0EFEB',
             border: 'none',
-            borderRadius: '6px',
-            padding: '10px 20px',
-            fontSize: '14px',
+            padding: '9px 18px',
+            fontSize: '12px',
+            fontFamily: 'var(--font-lora), Georgia, serif',
             fontWeight: '700',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
             cursor: status === 'loading' ? 'not-allowed' : 'pointer',
             whiteSpace: 'nowrap',
-            transition: 'background-color 0.15s',
+            borderRadius: 0,
           }}
         >
           {status === 'loading' ? 'Subscribing…' : 'Subscribe'}
@@ -136,7 +147,13 @@ export default function EmailCapture({ context = 'homepage' }: EmailCaptureProps
       </form>
 
       {status === 'error' && (
-        <p style={{ color: '#f85149', fontSize: '13px', margin: '10px 0 0' }}>
+        <p style={{
+          fontFamily: 'var(--font-lora), Georgia, serif',
+          color: '#9F2236',
+          fontSize: '12px',
+          margin: '10px 0 0',
+          fontStyle: 'italic',
+        }}>
           {errorMsg}
         </p>
       )}

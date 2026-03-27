@@ -3,21 +3,23 @@ import { ManHoursItem, ManHoursSource, ManHoursLink } from '@/lib/parseManHours'
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function QualityBadge({ quality }: { quality: 'STRONG' | 'MODERATE' | 'WEAK' }) {
-  const styles: Record<string, { bg: string; color: string }> = {
-    STRONG: { bg: '#1a4731', color: '#3fb950' },
-    MODERATE: { bg: '#2d2a00', color: '#d29922' },
-    WEAK: { bg: '#3d0f0f', color: '#f85149' },
+  const map: Record<string, { color: string; bg: string }> = {
+    STRONG:   { color: '#2D5A1B', bg: '#E8F4E8' },
+    MODERATE: { color: '#495772', bg: '#E8ECF2' },
+    WEAK:     { color: '#646667', bg: '#EBEBEB' },
   }
-  const s = styles[quality]
+  const s = map[quality]
   return (
     <span style={{
       backgroundColor: s.bg,
       color: s.color,
-      fontSize: '11px',
+      fontFamily: 'var(--font-lora), Georgia, serif',
+      fontSize: '10px',
       fontWeight: '700',
-      letterSpacing: '0.05em',
+      letterSpacing: '0.08em',
+      textTransform: 'uppercase',
       padding: '2px 8px',
-      borderRadius: '4px',
+      border: `1px solid ${s.color}33`,
     }}>
       {quality}
     </span>
@@ -25,23 +27,25 @@ function QualityBadge({ quality }: { quality: 'STRONG' | 'MODERATE' | 'WEAK' }) 
 }
 
 function CategoryBadge({ category }: { category: string }) {
-  const styles: Record<string, { bg: string; color: string }> = {
-    LEGISLATION: { bg: '#0d2d5e', color: '#79b8ff' },
-    LEGAL: { bg: '#2d1a5e', color: '#c0a0ff' },
-    ADMINISTRATION: { bg: '#0d3d1a', color: '#56d364' },
-    SECURITY: { bg: '#3d2000', color: '#f0883e' },
-    CLAIM: { bg: '#3d2d00', color: '#e3b341' },
+  const map: Record<string, { color: string }> = {
+    LEGISLATION:    { color: '#495772' },
+    LEGAL:          { color: '#5A4A7A' },
+    ADMINISTRATION: { color: '#2D5A1B' },
+    SECURITY:       { color: '#7A4A1B' },
+    CLAIM:          { color: '#7A6A1B' },
   }
-  const s = styles[category] || { bg: '#21262d', color: '#8b949e' }
+  const c = (map[category] || { color: '#646667' }).color
   return (
     <span style={{
-      backgroundColor: s.bg,
-      color: s.color,
-      fontSize: '11px',
+      fontFamily: 'var(--font-lora), Georgia, serif',
+      fontSize: '10px',
       fontWeight: '700',
-      letterSpacing: '0.08em',
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase',
+      color: c,
+      backgroundColor: '#F0EFEB',
+      border: '1px solid #D5D5D7',
       padding: '2px 8px',
-      borderRadius: '4px',
     }}>
       {category}
     </span>
@@ -51,19 +55,25 @@ function CategoryBadge({ category }: { category: string }) {
 function BiasChip({ bias }: { bias: string }) {
   if (!bias) return null
   const lower = bias.toLowerCase()
-
-  let color = '#8b949e'
-  if (lower.includes('far left')) color = '#e11d48'
-  else if (lower.includes('center-left') || lower.includes('center left')) color = '#fb923c'
-  else if (lower.includes('left')) color = '#f97316'
-  else if (lower === 'center') color = '#94a3b8'
-  else if (lower.includes('center-right') || lower.includes('center right')) color = '#60a5fa'
-  else if (lower.includes('right')) color = '#3b82f6'
-  else if (lower.includes('government')) color = '#a78bfa'
-  else if (lower.includes('academic')) color = '#34d399'
+  let color = '#646667'
+  if (lower.includes('far left'))                                         color = '#9F2236'
+  else if (lower.includes('center-left') || lower.includes('center left')) color = '#7A4A1B'
+  else if (lower.includes('left'))                                         color = '#7A3A1B'
+  else if (lower === 'center')                                             color = '#646667'
+  else if (lower.includes('center-right') || lower.includes('center right')) color = '#495772'
+  else if (lower.includes('right'))                                        color = '#3A4A72'
+  else if (lower.includes('government'))                                   color = '#5A4A7A'
+  else if (lower.includes('academic'))                                     color = '#2D5A1B'
 
   return (
-    <span style={{ color, fontSize: '11px', fontWeight: '500' }}>{bias}</span>
+    <span style={{
+      fontFamily: 'var(--font-lora), Georgia, serif',
+      fontStyle: 'italic',
+      color,
+      fontSize: '11px',
+    }}>
+      {bias}
+    </span>
   )
 }
 
@@ -72,19 +82,13 @@ function LinkList({ links }: { links: ManHoursLink[] }) {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
       {links.map((l, i) => (
-        <a
-          key={i}
-          href={l.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            color: '#58a6ff',
-            fontSize: '13px',
-            textDecoration: 'none',
-            padding: '2px 0',
-            borderBottom: '1px solid #1f4a7a',
-          }}
-        >
+        <a key={i} href={l.url} target="_blank" rel="noopener noreferrer" style={{
+          fontFamily: 'var(--font-lora), Georgia, serif',
+          color: '#495772',
+          fontSize: '13px',
+          textDecoration: 'none',
+          borderBottom: '1px solid #49577266',
+        }}>
           {l.text}
         </a>
       ))}
@@ -98,17 +102,18 @@ function SourceList({ sources }: { sources: ManHoursSource[] }) {
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
       {sources.map((s, i) => (
         <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <a
-            href={s.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: '#58a6ff', fontSize: '13px', textDecoration: 'none' }}
-          >
+          <a href={s.url} target="_blank" rel="noopener noreferrer" style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            color: '#495772',
+            fontSize: '13px',
+            textDecoration: 'none',
+            borderBottom: '1px solid #49577266',
+          }}>
             {s.name}
           </a>
           {s.bias && (
             <>
-              <span style={{ color: '#30363d' }}>·</span>
+              <span style={{ color: '#D5D5D7' }}>·</span>
               <BiasChip bias={s.bias} />
             </>
           )}
@@ -118,62 +123,94 @@ function SourceList({ sources }: { sources: ManHoursSource[] }) {
   )
 }
 
+// ─── Label / Section header ───────────────────────────────────────────────────
+
+function FieldLabel({ text }: { text: string }) {
+  return (
+    <div style={{
+      fontFamily: 'var(--font-lora), Georgia, serif',
+      fontSize: '10px',
+      fontWeight: '700',
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase',
+      color: '#646667',
+      marginBottom: '4px',
+    }}>
+      {text}
+    </div>
+  )
+}
+
 // ─── Main Item Card ───────────────────────────────────────────────────────────
 
 export default function ItemCard({ item }: { item: ManHoursItem }) {
   return (
     <article style={{
-      backgroundColor: '#161b22',
-      border: '1px solid #30363d',
-      borderRadius: '8px',
-      padding: '24px',
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #D5D5D7',
+      borderLeft: '3px solid #D5D5D7',
+      padding: '22px 24px',
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
+      gap: '14px',
     }}>
 
       {/* Header row */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ color: '#484f58', fontSize: '13px', fontWeight: '600' }}>
-            #{String(item.number).padStart(2, '0')}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <span style={{
+          fontFamily: 'var(--font-playfair), Georgia, serif',
+          color: '#9F2236',
+          fontSize: '12px',
+          fontWeight: '700',
+          fontStyle: 'italic',
+          marginRight: '4px',
+        }}>
+          #{String(item.number).padStart(2, '0')}
+        </span>
+        <CategoryBadge category={item.category} />
+        <QualityBadge quality={item.documentationQuality} />
+        {item.coverageGapNotable && (
+          <span style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            backgroundColor: '#F5E8EB',
+            color: '#9F2236',
+            fontSize: '10px',
+            fontWeight: '700',
+            letterSpacing: '0.08em',
+            padding: '2px 8px',
+            border: '1px solid #9F223633',
+            textTransform: 'uppercase',
+          }}>
+            ⚠ Coverage Gap
           </span>
-          <CategoryBadge category={item.category} />
-          <QualityBadge quality={item.documentationQuality} />
-          {item.coverageGapNotable && (
-            <span style={{
-              backgroundColor: '#3d2000',
-              color: '#f0883e',
-              fontSize: '11px',
-              fontWeight: '700',
-              padding: '2px 8px',
-              borderRadius: '4px',
-              letterSpacing: '0.05em',
-            }}>
-              ⚠ COVERAGE GAP
-            </span>
-          )}
-        </div>
+        )}
       </div>
 
       {/* Headline */}
       <h2 style={{
-        color: '#e6edf3',
+        fontFamily: 'var(--font-playfair), Georgia, serif',
+        color: '#1C1C1C',
         fontSize: '18px',
-        fontWeight: '600',
+        fontWeight: '700',
         lineHeight: '1.4',
-        fontFamily: 'Georgia, serif',
         margin: 0,
+        letterSpacing: '-0.2px',
       }}>
         {item.headline}
       </h2>
 
+      <div style={{ borderTop: '1px solid #D5D5D7' }} />
+
       {/* Claimant */}
       <div>
-        <span style={{ color: '#484f58', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-          Claimant
-        </span>
-        <p style={{ color: '#8b949e', fontSize: '14px', margin: '4px 0 0', lineHeight: '1.5' }}>
+        <FieldLabel text="Claimant" />
+        <p style={{
+          fontFamily: 'var(--font-lora), Georgia, serif',
+          color: '#1C1C1C',
+          fontSize: '14px',
+          margin: 0,
+          lineHeight: '1.55',
+        }}>
           {item.claimant}
         </p>
       </div>
@@ -181,28 +218,30 @@ export default function ItemCard({ item }: { item: ManHoursItem }) {
       {/* Primary sources */}
       {item.sources.length > 0 && (
         <div>
-          <span style={{ color: '#484f58', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Source
-          </span>
-          <div style={{ marginTop: '6px' }}>
-            <SourceList sources={item.sources} />
-          </div>
+          <FieldLabel text="Source" />
+          <SourceList sources={item.sources} />
         </div>
       )}
 
       {/* Documentation quality note */}
       {item.documentationQualityNote && (
         <div style={{
-          backgroundColor: '#0d1117',
-          border: '1px solid #21262d',
-          borderRadius: '6px',
-          padding: '12px 14px',
+          backgroundColor: '#F0EFEB',
+          borderLeft: '3px solid #D5D5D7',
+          padding: '10px 14px',
           display: 'flex',
           gap: '10px',
           alignItems: 'flex-start',
         }}>
           <QualityBadge quality={item.documentationQuality} />
-          <p style={{ color: '#8b949e', fontSize: '13px', margin: 0, lineHeight: '1.5' }}>
+          <p style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            fontStyle: 'italic',
+            color: '#646667',
+            fontSize: '13px',
+            margin: 0,
+            lineHeight: '1.55',
+          }}>
             {item.documentationQualityNote}
           </p>
         </div>
@@ -211,14 +250,14 @@ export default function ItemCard({ item }: { item: ManHoursItem }) {
       {/* Coverage gap */}
       {item.coverageGap && (
         <div>
-          <span style={{ color: '#484f58', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Coverage Gap
-          </span>
+          <FieldLabel text="Coverage Gap" />
           <p style={{
-            color: item.coverageGapNotable ? '#f0883e' : '#8b949e',
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            color: item.coverageGapNotable ? '#9F2236' : '#646667',
+            fontStyle: item.coverageGapNotable ? 'normal' : 'italic',
             fontSize: '14px',
-            margin: '4px 0 0',
-            lineHeight: '1.5',
+            margin: 0,
+            lineHeight: '1.55',
           }}>
             {item.coverageGap}
           </p>
@@ -228,10 +267,14 @@ export default function ItemCard({ item }: { item: ManHoursItem }) {
       {/* Notes */}
       {item.notes && (
         <div>
-          <span style={{ color: '#484f58', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Notes
-          </span>
-          <p style={{ color: '#c9d1d9', fontSize: '14px', margin: '4px 0 0', lineHeight: '1.6' }}>
+          <FieldLabel text="Notes" />
+          <p style={{
+            fontFamily: 'var(--font-lora), Georgia, serif',
+            color: '#1C1C1C',
+            fontSize: '14px',
+            margin: 0,
+            lineHeight: '1.6',
+          }}>
             {item.notes}
           </p>
         </div>
@@ -240,24 +283,16 @@ export default function ItemCard({ item }: { item: ManHoursItem }) {
       {/* Coverage spread */}
       {item.coverageSpread.length > 0 && (
         <div>
-          <span style={{ color: '#484f58', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Coverage Spread
-          </span>
-          <div style={{ marginTop: '6px' }}>
-            <SourceList sources={item.coverageSpread} />
-          </div>
+          <FieldLabel text="Coverage Spread" />
+          <SourceList sources={item.coverageSpread} />
         </div>
       )}
 
       {/* Documentation links */}
       {item.documentation.length > 0 && (
         <div>
-          <span style={{ color: '#484f58', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Documentation
-          </span>
-          <div style={{ marginTop: '6px' }}>
-            <LinkList links={item.documentation} />
-          </div>
+          <FieldLabel text="Documentation" />
+          <LinkList links={item.documentation} />
         </div>
       )}
 
